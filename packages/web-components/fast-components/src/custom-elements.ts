@@ -50,6 +50,7 @@ import { fastToolbar } from "./toolbar/index";
 import { fastTooltip } from "./tooltip/index";
 import { fastTreeItem } from "./tree-item/index";
 import { fastTreeView } from "./tree-view/index";
+import { fastVirtualList } from "./virtual-list/index";
 
 // Don't delete these. They're needed so that API-extractor doesn't add import types
 // with improper pathing
@@ -66,6 +67,7 @@ import type { SliderLabel } from "./slider-label/index";
 import type { TextArea } from "./text-area/index";
 import type { TextField } from "./text-field/index";
 import type { Toolbar } from "./toolbar/index";
+import type { VirtualList } from "./virtual-list/index";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 // When adding new components, make sure to add the component to the `allComponents` object
@@ -125,6 +127,7 @@ export {
     fastToolbar,
     fastTreeView,
     fastTreeItem,
+    fastVirtualList,
 };
 
 /**
@@ -186,6 +189,7 @@ export const allComponents = {
     fastToolbar,
     fastTreeView,
     fastTreeItem,
+    fastVirtualList,
     register(container?: Container, ...rest: any[]) {
         if (!container) {
             // preserve backward compatibility with code that loops through

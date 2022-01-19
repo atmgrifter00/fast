@@ -96,3 +96,5 @@ import fastTreeItemDefinition from "./tree-item/tree-item.vscode.definition.json
 export { fastTreeItemDefinition };
 import fastTreeViewDefinition from "./tree-view/tree-view.vscode.definition.json";
 export { fastTreeViewDefinition };
+import fastVirtualListDefinition from "./virtual-list/virtual-list.vscode.definition.json";
+export { fastVirtualListDefinition };
