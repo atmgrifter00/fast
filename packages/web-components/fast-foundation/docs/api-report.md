@@ -2350,7 +2350,7 @@ export type SliderOptions = FoundationElementDefinition & {
 // @public
 export const sliderTemplate: FoundationElementTemplate<ViewTemplate<Slider>, SliderOptions>;
 
-// @public (undocumented)
+// @public
 export interface SpanMap {
     // (undocumented)
     end: number;
