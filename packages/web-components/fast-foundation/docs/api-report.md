@@ -2780,6 +2780,10 @@ export class VirtualList extends FoundationElement {
     connectedCallback(): void;
     // @internal
     containerElement: HTMLDivElement;
+    // @internal
+    defaultHorizontalItemTemplate: ViewTemplate;
+    // @internal
+    defaultVerticalItemTemplate: ViewTemplate;
     // @internal (undocumented)
     disconnectedCallback(): void;
     // @internal
@@ -2789,6 +2793,7 @@ export class VirtualList extends FoundationElement {
     getGeneratedItemPosition(itemIndex: number): number;
     // @internal
     handleChange(source: any, splices: Splice[]): void;
+    itemContentsTemplate: ViewTemplate;
     items: object[];
     // @beta
     itemSpan: number;
@@ -2820,6 +2825,21 @@ export class VirtualList extends FoundationElement {
 
 // @beta
 export type VirtualListAutoUpdateMode = "manual" | "viewport-resize" | "auto";
+
+// @public
+export class VirtualListItem extends FoundationElement {
+    // @internal (undocumented)
+    connectedCallback(): void;
+    contentTemplate: ViewTemplate;
+    // @internal
+    defaultContentsTemplate: ViewTemplate;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    itemData: object;
+    }
+
+// @public
+export const virtualListItemTemplate: FoundationElementTemplate<ViewTemplate<VirtualListItem>>;
 
 // @public
 export const virtualListTemplate: FoundationElementTemplate<ViewTemplate<VirtualList>>;
