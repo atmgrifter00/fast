@@ -2350,7 +2350,7 @@ export type SliderOptions = FoundationElementDefinition & {
 // @public
 export const sliderTemplate: FoundationElementTemplate<ViewTemplate<Slider>, SliderOptions>;
 
-// @beta
+// @public
 export interface SpanMap {
     // (undocumented)
     end: number;
@@ -2820,9 +2820,9 @@ export class VirtualList extends FoundationElement {
     visibleItems: any[];
     // @internal
     visibleItemSpans: SpanMap[];
-    }
+}
 
-// @beta
+// @public
 export type VirtualListAutoUpdateMode = "manual" | "viewport-resize" | "auto";
 
 // @public
