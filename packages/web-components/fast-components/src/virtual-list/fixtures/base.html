@@ -14,9 +14,29 @@
 </h3>
 
 <h3>
-    Virtualization off
+    Dynamic Heights
 </h3>
 
+<fast-virtual-list
+    orientation="vertical"
+    viewport-buffer="200"
+    auto-update-mode="auto"
+    idle-callback-timeout="2000"
+    id="accordionTable"
+    style="
+        grid-column: 05;
+        grid-row: 3;
+        height: 800px;
+        width: 500px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: block;
+    "
+></fast-virtual-list>
+
+<!--<h3>
+    Virtualization off
+</h3>
 <fast-virtual-list
     virtualize="false"
     orientation="horizontal"
@@ -209,27 +229,27 @@
             overflow-x: hidden;
             display: block;
         "
-    ></fast-virtual-list>
+    ></fast-virtual-list> -->
 
-    <h3 style="grid-column: 5; grid-row: 1;">
-        Variable heights
-    </h3>
+<h3 style="grid-column: 5; grid-row: 1;">
+    Variable heights
+</h3>
 
-    <fast-virtual-list
-        orientation="vertical"
-        item-size="200"
-        viewport-buffer="200"
-        auto-update-mode="auto"
-        idle-callback-timeout="2000"
-        id="stackv3"
-        style="
-            grid-column: 5;
-            grid-row: 2;
-            height: 800px;
-            width: 200px;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            display: block;
-        "
-    ></fast-virtual-list>
-</div>
+<fast-virtual-list
+    orientation="vertical"
+    item-size="200"
+    viewport-buffer="200"
+    auto-update-mode="auto"
+    idle-callback-timeout="2000"
+    id="stackv3"
+    style="
+        grid-column: 5;
+        grid-row: 2;
+        height: 800px;
+        width: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: block;
+    "
+></fast-virtual-list>
+<!-- </div> -->

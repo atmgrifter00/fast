@@ -1,7 +1,8 @@
-import { html, when } from "@microsoft/fast-element";
+import { html, repeat, when } from "@microsoft/fast-element";
 import addons from "@storybook/addons";
 import { STORY_RENDERED } from "@storybook/core-events";
 import {
+    AccordionItem,
     VirtualList as FoundationVirtualList,
     SizeMap,
 } from "@microsoft/fast-foundation";
@@ -162,6 +163,30 @@ const listItemContentsTemplate = html`
     </fast-card>
 `;
 
+const accordionItemTemplate = html`
+    <fast-accordion-item
+        style="width: 500px;"
+        @change=${(x, c) =>
+            onAccordionVirtuaListChanged(c.event, x, x.itemData, x.itemData.dataIndex)}
+    >
+        ${repeat(
+            x => x.itemData.data,
+            html`
+                <fast-data-grid-row grid-template-columns="1fr 1fr 1fr 1fr">
+                    ${repeat(
+                        x => Object.values(x),
+                        html`
+                            <fast-data-grid-cell grid-column=${(x, c) => c.index}>
+                                ${x => x}
+                            </fast-data-grid-cell>
+                        `
+                    )}
+                </fast-data-grid-row>
+            `
+        )}
+    </fast-accordion-item>
+`;
+
 addons.getChannel().addListener(STORY_RENDERED, (name: string) => {
     if (name.toLowerCase().startsWith("virtual-list")) {
         data = newDataSet(10000, 1);
@@ -175,55 +200,55 @@ addons.getChannel().addListener(STORY_RENDERED, (name: string) => {
             });
         }
 
-        const stackh1 = document.getElementById("stackh1") as FoundationVirtualList;
-        stackh1.listItemContext = {
-            listItemContentsTemplate: listItemContentsTemplate,
-            loadMode: "idle",
-            titleString: "title:",
-        };
-        stackh1.items = newDataSet(50, 1);
+        // const stackh1 = document.getElementById("stackh1") as FoundationVirtualList;
+        // stackh1.listItemContext = {
+        //     listItemContentsTemplate: listItemContentsTemplate,
+        //     loadMode: "idle",
+        //     titleString: "title:",
+        // };
+        // stackh1.items = newDataSet(50, 1);
 
-        const stackh2 = document.getElementById("stackh2") as FoundationVirtualList;
-        stackh2.listItemContext = {
-            listItemContentsTemplate: listItemContentsTemplate,
-            loadMode: "idle",
-            titleString: "title:",
-        };
-        stackh2.items = data;
+        // const stackh2 = document.getElementById("stackh2") as FoundationVirtualList;
+        // stackh2.listItemContext = {
+        //     listItemContentsTemplate: listItemContentsTemplate,
+        //     loadMode: "idle",
+        //     titleString: "title:",
+        // };
+        // stackh2.items = data;
 
-        const stackhImmediate = document.getElementById(
-            "stackhimmediate"
-        ) as FoundationVirtualList;
-        stackhImmediate.listItemContext = {
-            listItemContentsTemplate: listItemContentsTemplate,
-            titleString: "title:",
-        };
-        stackhImmediate.items = data;
+        // const stackhImmediate = document.getElementById(
+        //     "stackhimmediate"
+        // ) as FoundationVirtualList;
+        // stackhImmediate.listItemContext = {
+        //     listItemContentsTemplate: listItemContentsTemplate,
+        //     titleString: "title:",
+        // };
+        // stackhImmediate.items = data;
 
-        const stackh3 = document.getElementById("stackh3") as FoundationVirtualList;
-        stackh3.itemTemplate = horizontalImageItemTemplate;
-        stackh3.items = data;
+        // const stackh3 = document.getElementById("stackh3") as FoundationVirtualList;
+        // stackh3.itemTemplate = horizontalImageItemTemplate;
+        // stackh3.items = data;
 
-        const stackh4 = document.getElementById("stackh4") as FoundationVirtualList;
-        stackh4.itemTemplate = horizontalImageItemTemplate;
-        stackh4.items = data;
+        // const stackh4 = document.getElementById("stackh4") as FoundationVirtualList;
+        // stackh4.itemTemplate = horizontalImageItemTemplate;
+        // stackh4.items = data;
 
-        const stackGrid = document.getElementById("stackgrid") as FoundationVirtualList;
-        stackGrid.itemTemplate = rowItemTemplate;
-        stackGrid.items = gridData;
+        // const stackGrid = document.getElementById("stackgrid") as FoundationVirtualList;
+        // stackGrid.itemTemplate = rowItemTemplate;
+        // stackGrid.items = gridData;
 
-        const stackv1 = document.getElementById("stackv1") as FoundationVirtualList;
-        stackv1.itemTemplate = verticalImageItemTemplate;
-        stackv1.viewportElement = document.documentElement;
-        stackv1.items = data;
+        // const stackv1 = document.getElementById("stackv1") as FoundationVirtualList;
+        // stackv1.itemTemplate = verticalImageItemTemplate;
+        // stackv1.viewportElement = document.documentElement;
+        // stackv1.items = data;
 
-        const stackv2 = document.getElementById("stackv2") as FoundationVirtualList;
-        stackv2.items = data;
-        stackv2.listItemContext = {
-            loadMode: "idle",
-            listItemContentsTemplate: listItemContentsTemplate,
-            titleString: "title:",
-        };
+        // const stackv2 = document.getElementById("stackv2") as FoundationVirtualList;
+        // stackv2.items = data;
+        // stackv2.listItemContext = {
+        //     loadMode: "idle",
+        //     listItemContentsTemplate: listItemContentsTemplate,
+        //     titleString: "title:",
+        // };
 
         const stackv3 = document.getElementById("stackv3") as FoundationVirtualList;
         stackv3.sizemap = dataSizeMap;
@@ -231,6 +256,18 @@ addons.getChannel().addListener(STORY_RENDERED, (name: string) => {
         stackv3.listItemContext = {
             loadMode: "idle",
             listItemContentsTemplate: listItemContentsTemplate,
+            titleString: "title:",
+        };
+
+        const columnData = newColumnDataSet(10000, 1);
+        const accordionTable = document.getElementById(
+            "accordionTable"
+        ) as FoundationVirtualList;
+        accordionTable.sizemap = initializeAccordionSizeMap(columnData);
+        accordionTable.items = columnData;
+        accordionTable.listItemContext = {
+            loadMode: "idle",
+            listItemContentsTemplate: accordionItemTemplate,
             titleString: "title:",
         };
 
@@ -245,6 +282,25 @@ addons.getChannel().addListener(STORY_RENDERED, (name: string) => {
         }
     }
 });
+
+function onAccordionVirtuaListChanged(
+    event: Event,
+    virtualListItem: Node,
+    itemData: object[],
+    itemIndex: number
+) {
+    const accordionItem = event.target as AccordionItem;
+    const virtualList = virtualListItem?.parentElement;
+    const data = itemData;
+    let sizeMap = (virtualList as FoundationVirtualList).sizemap;
+    sizeMap = updateSizeMap(
+        [...sizeMap],
+        itemIndex,
+        (data as any).data.length,
+        accordionItem.expanded
+    );
+    (virtualList as FoundationVirtualList).sizemap = sizeMap;
+}
 
 function reloadImmediate(): void {
     const stackhImmediate = document.getElementById(
@@ -276,6 +332,35 @@ function newDataSet(rowCount: number, prefix: number): object[] {
     return newData;
 }
 
+function newColumnDataSet(rowCount: number, prefix: number): object[] {
+    const newData: object[] = [];
+    for (let i = 1; i <= rowCount; i++) {
+        const numSubRows = Math.random() * 4;
+        const dataArray: any[] = [];
+        for (let j = 0; j < numSubRows; j++) {
+            dataArray.push(newDataRow(i.toString()));
+        }
+        newData.push({
+            numRows: numSubRows,
+            dataIndex: i - 1,
+            data: dataArray,
+        });
+    }
+    return newData;
+}
+
+function newDataRow(id: string): object {
+    return {
+        rowId: `rowid-${id}`,
+        item1: `value 1-${id}`,
+        item2: `value 2-${id}`,
+        item3: `value 3-${id}`,
+        item4: `value 4-${id}`,
+        item5: `value 5-${id}`,
+        item6: `value 6-${id}`,
+    };
+}
+
 function generateSizeMap(data: object[]) {
     const sizemap: SizeMap[] = [];
     const itemsCount: number = data.length;
@@ -291,6 +376,40 @@ function generateSizeMap(data: object[]) {
         currentPosition = mapEnd;
     }
     return sizemap;
+}
+
+function initializeAccordionSizeMap(data: object[]) {
+    const sizemap: SizeMap[] = [];
+    const itemsCount: number = data.length;
+    let currentPosition: number = 0;
+    for (let i = 0; i < itemsCount; i++) {
+        const nextSize: number = 100;
+        const mapEnd = nextSize + currentPosition;
+        sizemap.push({
+            start: currentPosition,
+            size: nextSize,
+            end: mapEnd,
+        });
+        currentPosition = mapEnd;
+    }
+    return sizemap;
+}
+
+function updateSizeMap(
+    sizeMap: SizeMap[],
+    index: number,
+    dataCount: number,
+    grow: boolean
+): SizeMap[] {
+    const sizeUpdate = grow ? dataCount * 100 : -(dataCount * 100);
+    sizeMap[index].size = sizeMap[index].size + sizeUpdate;
+    sizeMap[index].end = sizeMap[index].end + sizeUpdate;
+    for (let i = index + 1; i < sizeMap.length; i++) {
+        sizeMap[i].start = sizeMap[i].start + sizeUpdate;
+        sizeMap[i].end = sizeMap[i].end + sizeUpdate;
+    }
+
+    return sizeMap;
 }
 
 export default {
