@@ -2357,16 +2357,6 @@ export type SliderOptions = FoundationElementDefinition & {
 export const sliderTemplate: FoundationElementTemplate<ViewTemplate<Slider>, SliderOptions>;
 
 // @public
-export interface SpanMap {
-    // (undocumented)
-    end: number;
-    // (undocumented)
-    span: number;
-    // (undocumented)
-    start: number;
-}
-
-// @public
 export class StartEnd {
     // (undocumented)
     end: HTMLSlotElement;
