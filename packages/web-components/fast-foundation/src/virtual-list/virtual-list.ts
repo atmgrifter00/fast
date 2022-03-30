@@ -27,10 +27,10 @@ export type VirtualListAutoUpdateMode = "manual" | "viewport-resize" | "auto";
  *
  * @public
  */
-export interface SpanMap {
+export interface SizeMap {
     start: number;
     end: number;
-    span: number;
+    size: number;
 }
 
 /**
@@ -44,9 +44,9 @@ export class VirtualList extends FoundationElement {
      *
      * @public
      */
-    @attr({ attribute: "virtualize", mode: "boolean" })
-    public virtualize: boolean = true;
-    private virtualizeChanged(): void {
+    @attr({ attribute: "virtualization-enabled", mode: "boolean" })
+    public virtualizationEnabled: boolean = true;
+    private virtualizationEnabledChanged(): void {
         if (this.$fastController.isConnected) {
             this.reset();
         }
@@ -69,15 +69,15 @@ export class VirtualList extends FoundationElement {
     }
 
     /**
-     * The span in pixels of each item along the virtualization axis
+     * The size in pixels of each item along the virtualization axis
      *
      * @public
      * @remarks
-     * HTML Attribute: item-span
+     * HTML Attribute: item-size
      */
-    @attr({ attribute: "item-span", converter: nullableNumberConverter })
-    public itemSpan: number = 50;
-    private itemSpanChanged(): void {
+    @attr({ attribute: "item-size", converter: nullableNumberConverter })
+    public itemSize: number = 50;
+    private itemSizeChanged(): void {
         if (this.$fastController.isConnected) {
             this.updateDimensions();
         }
@@ -138,11 +138,6 @@ export class VirtualList extends FoundationElement {
      */
     @attr({ attribute: "recycle", mode: "boolean" })
     public recycle: boolean = true;
-    // private recycleChanged(): void {
-    //     if (this.$fastController.isConnected) {
-    //         TODO: implement this
-    //     }
-    // }
 
     /**
      *  The array of items to be displayed
@@ -158,15 +153,15 @@ export class VirtualList extends FoundationElement {
     }
 
     /**
-     * The spanmap for the items
-     * Authors need to provide a spanmap for arrays of irregular span items,
-     * when the items have a uniform span use the 'item-span' attribute instead.
+     * The sizemap for the items
+     * Authors need to provide a sizemap for arrays of irregular size items,
+     * when the items have a uniform size use the 'item-size' attribute instead.
      *
      * @public
      */
     @observable
-    public spanmap: SpanMap[];
-    private spanmapChanged(): void {
+    public sizemap: SizeMap[];
+    private sizemapChanged(): void {
         if (this.$fastController.isConnected) {
             this.updateDimensions();
         }
@@ -252,16 +247,16 @@ export class VirtualList extends FoundationElement {
      * @internal
      */
     @observable
-    public visibleItemSpans: SpanMap[] = [];
+    public visibleItemMap: SizeMap[] = [];
 
     /**
-     * The calculated span of the total stack.
+     * The calculated size of the total stack.
      * (ie. all items + start/end regions)
      *
      * @internal
      */
     @observable
-    public totalListSpan: number = 0;
+    public totalListSize: number = 0;
 
     /**
      * The size in pixels of the start "spacer"
@@ -270,7 +265,7 @@ export class VirtualList extends FoundationElement {
      * @internal
      */
     @observable
-    public startSpacerSpan: number = 0;
+    public startSpacerSize: number = 0;
 
     /**
      * The size in pixels of the end "spacer"
@@ -279,7 +274,7 @@ export class VirtualList extends FoundationElement {
      * @internal
      */
     @observable
-    public endSpacerSpan: number = 0;
+    public endSpacerSize: number = 0;
 
     /**
      * The index of the first item in the array to be rendered
@@ -382,10 +377,7 @@ export class VirtualList extends FoundationElement {
         this.cancelPendingPositionUpdates();
         this.unobserveItems();
         this.visibleItems = this.visibleItems.splice(0, this.visibleItems.length);
-        this.visibleItemSpans = this.visibleItemSpans.splice(
-            0,
-            this.visibleItemSpans.length
-        );
+        this.visibleItemMap = this.visibleItemMap.splice(0, this.visibleItemMap.length);
         this.disconnectResizeDetector();
     }
 
@@ -405,20 +397,20 @@ export class VirtualList extends FoundationElement {
      *
      * @public
      */
-    public getItemSpanMap = (itemIndex: number): SpanMap | null => {
+    public getItemSizeMap = (itemIndex: number): SizeMap | null => {
         if (itemIndex < 0 || itemIndex >= this.items.length) {
             // out of range
             return null;
         }
 
-        if (this.spanmap !== undefined) {
-            return this.spanmap[itemIndex];
+        if (this.sizemap !== undefined) {
+            return this.sizemap[itemIndex];
         }
 
         return {
-            start: itemIndex * this.itemSpan,
-            end: itemIndex * this.itemSpan + this.itemSpan,
-            span: this.itemSpan,
+            start: itemIndex * this.itemSize,
+            end: itemIndex * this.itemSize + this.itemSize,
+            size: this.itemSize,
         };
     };
 
@@ -472,7 +464,7 @@ export class VirtualList extends FoundationElement {
      * get position updates
      */
     protected requestPositionUpdates(): void {
-        if (!this.virtualize) {
+        if (!this.virtualizationEnabled) {
             this.updateVisibleItems();
             return;
         }
@@ -673,14 +665,14 @@ export class VirtualList extends FoundationElement {
      */
     private updateDimensions = (): void => {
         if (this.items === undefined) {
-            this.totalListSpan = 0;
+            this.totalListSize = 0;
             return;
         }
-        if (this.spanmap !== undefined) {
-            this.totalListSpan =
-                this.spanmap.length > 0 ? this.spanmap[this.spanmap.length - 1].end : 0;
+        if (this.sizemap !== undefined) {
+            this.totalListSize =
+                this.sizemap.length > 0 ? this.sizemap[this.sizemap.length - 1].end : 0;
         } else {
-            this.totalListSpan = this.itemSpan * this.items.length;
+            this.totalListSize = this.itemSize * this.items.length;
         }
 
         this.requestPositionUpdates();
@@ -694,9 +686,9 @@ export class VirtualList extends FoundationElement {
             return;
         }
 
-        if (!this.virtualize) {
+        if (!this.virtualizationEnabled) {
             this.visibleItems.splice(0, this.visibleItems.length, ...this.items);
-            this.updateVisibleItemSpans(0, this.visibleItems.length - 1);
+            this.updateVisibleItemSizes(0, this.visibleItems.length - 1);
             return;
         }
 
@@ -709,7 +701,7 @@ export class VirtualList extends FoundationElement {
         let {
             top: containerStart,
             bottom: containerEnd,
-            height: containerSpan,
+            height: containerSize,
         } = this.containerRect;
 
         if (this.orientation === Orientation.horizontal) {
@@ -717,7 +709,7 @@ export class VirtualList extends FoundationElement {
             ({
                 left: containerStart,
                 right: containerEnd,
-                width: containerSpan,
+                width: containerSize,
             } = this.containerRect);
         }
 
@@ -725,58 +717,58 @@ export class VirtualList extends FoundationElement {
         let renderedRangeEnd = this.lastRenderedIndex;
 
         if (viewportStart >= containerEnd) {
-            renderedRangeStart = containerSpan;
-            renderedRangeEnd = containerSpan;
+            renderedRangeStart = containerSize;
+            renderedRangeEnd = containerSize;
         } else if (viewportEnd <= containerStart) {
             renderedRangeStart = 0;
             renderedRangeEnd = 0;
         } else {
             renderedRangeStart = viewportStart - containerStart - this.viewportBuffer;
             renderedRangeEnd =
-                containerSpan - (containerEnd - (viewportEnd + this.viewportBuffer));
+                containerSize - (containerEnd - (viewportEnd + this.viewportBuffer));
 
             renderedRangeStart = renderedRangeStart < 0 ? 0 : renderedRangeStart;
             renderedRangeEnd =
-                renderedRangeEnd > containerSpan ? containerSpan : renderedRangeEnd;
+                renderedRangeEnd > containerSize ? containerSize : renderedRangeEnd;
         }
 
         const visibleRangeLength = renderedRangeEnd - renderedRangeStart;
         let newFirstRenderedIndex: number = 0;
         let newLastRenderedIndex: number = 0;
 
-        if (this.spanmap === undefined) {
-            newFirstRenderedIndex = Math.floor(renderedRangeStart / this.itemSpan);
+        if (this.sizemap === undefined) {
+            newFirstRenderedIndex = Math.floor(renderedRangeStart / this.itemSize);
             newLastRenderedIndex =
-                newFirstRenderedIndex + Math.ceil(visibleRangeLength / this.itemSpan);
+                newFirstRenderedIndex + Math.ceil(visibleRangeLength / this.itemSize);
 
             newFirstRenderedIndex = Math.max(0, newFirstRenderedIndex);
             newLastRenderedIndex = Math.min(newLastRenderedIndex, this.items.length - 1);
 
-            this.startSpacerSpan = newFirstRenderedIndex * this.itemSpan;
-            this.endSpacerSpan =
-                (this.items.length - newLastRenderedIndex - 1) * this.itemSpan;
+            this.startSpacerSize = newFirstRenderedIndex * this.itemSize;
+            this.endSpacerSize =
+                (this.items.length - newLastRenderedIndex - 1) * this.itemSize;
         } else {
-            const firstVisibleItem: SpanMap | undefined = this.spanmap.find(
+            const firstVisibleItem: SizeMap | undefined = this.sizemap.find(
                 x => x.end >= renderedRangeStart
             );
             if (firstVisibleItem !== undefined) {
-                newFirstRenderedIndex = this.spanmap.indexOf(firstVisibleItem);
-                const lastVisibleItem: SpanMap | undefined = this.spanmap.find(
+                newFirstRenderedIndex = this.sizemap.indexOf(firstVisibleItem);
+                const lastVisibleItem: SizeMap | undefined = this.sizemap.find(
                     x => x.start >= renderedRangeEnd
                 );
                 newLastRenderedIndex =
                     lastVisibleItem === undefined
-                        ? this.spanmap.length - 1
-                        : this.spanmap.indexOf(lastVisibleItem);
+                        ? this.sizemap.length - 1
+                        : this.sizemap.indexOf(lastVisibleItem);
             }
 
             newFirstRenderedIndex = Math.max(0, newFirstRenderedIndex);
             newLastRenderedIndex = Math.min(newLastRenderedIndex, this.items.length - 1);
 
-            this.startSpacerSpan = this.spanmap[newFirstRenderedIndex].start;
-            this.endSpacerSpan =
-                this.spanmap[this.spanmap.length - 1].end -
-                this.spanmap[newLastRenderedIndex].end;
+            this.startSpacerSize = this.sizemap[newFirstRenderedIndex].start;
+            this.endSpacerSize =
+                this.sizemap[this.sizemap.length - 1].end -
+                this.sizemap[newLastRenderedIndex].end;
         }
 
         const newVisibleItems = this.items.slice(
@@ -784,42 +776,42 @@ export class VirtualList extends FoundationElement {
             newLastRenderedIndex + 1
         );
 
-        this.updateVisibleItemSpans(newFirstRenderedIndex, newLastRenderedIndex);
+        this.updateVisibleItemSizes(newFirstRenderedIndex, newLastRenderedIndex);
         this.visibleItems.splice(0, this.visibleItems.length, ...newVisibleItems);
     }
 
     /**
-     *  Updates the span map
+     *  Updates the size maps
      */
-    private updateVisibleItemSpans(
+    private updateVisibleItemSizes(
         newFirstRenderedIndex: number,
         newLastRenderedIndex: number
     ): void {
-        const newVisibleItemSpans: SpanMap[] = [];
+        const newVisibleItemSizes: SizeMap[] = [];
 
-        let top: number = this.startSpacerSpan;
+        let top: number = this.startSpacerSize;
 
-        if (this.spanmap === undefined) {
+        if (this.sizemap === undefined) {
             for (let i: number = newFirstRenderedIndex; i <= newLastRenderedIndex; i++) {
-                const thisSpanMap: SpanMap = {
+                const thisSizeMap: SizeMap = {
                     start: top,
-                    end: top + this.itemSpan,
-                    span: this.itemSpan,
+                    end: top + this.itemSize,
+                    size: this.itemSize,
                 };
-                top = thisSpanMap.end;
-                newVisibleItemSpans.push(thisSpanMap);
+                top = thisSizeMap.end;
+                newVisibleItemSizes.push(thisSizeMap);
             }
 
-            this.visibleItemSpans.splice(
+            this.visibleItemMap.splice(
                 0,
-                this.visibleItemSpans.length,
-                ...newVisibleItemSpans
+                this.visibleItemMap.length,
+                ...newVisibleItemSizes
             );
         } else {
-            this.visibleItemSpans.splice(
+            this.visibleItemMap.splice(
                 0,
-                this.visibleItemSpans.length,
-                ...this.spanmap.slice(newFirstRenderedIndex, newLastRenderedIndex + 1)
+                this.visibleItemMap.length,
+                ...this.sizemap.slice(newFirstRenderedIndex, newLastRenderedIndex + 1)
             );
         }
 
@@ -843,7 +835,7 @@ export class VirtualList extends FoundationElement {
         this.firstRenderedIndex = newFirstRenderedIndex;
         this.lastRenderedIndex = newLastRenderedIndex;
 
-        this.$emit("rendered-range-change", this, { bubbles: false });
+        this.$emit("renderedrangechange", this, { bubbles: false });
     }
 
     /**

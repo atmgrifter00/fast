@@ -1,7 +1,7 @@
 {
   "type": "patch",
-  "comment": "tooltip hover",
-  "packageName": "@microsoft/fast-components",
+  "comment": "anchored region not beta",
+  "packageName": "@microsoft/fast-foundation",
   "email": "scomea@microsoft.com",
   "dependentChangeType": "patch"
 }

@@ -1,8 +1,50 @@
 # Change Log - @microsoft/fast-foundation
 
-This log was last generated on Wed, 02 Mar 2022 07:12:58 GMT and should not be manually modified.
+This log was last generated on Fri, 11 Mar 2022 23:46:34 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.36.0
+
+Fri, 11 Mar 2022 23:46:34 GMT
+
+### Minor changes
+
+- BREAKING CHANGE: replace WC button with stock HTML button (jes@microsoft.com)
+- implement attribute reflection directive (nicholasrice@users.noreply.github.com)
+
+### Patches
+
+- use WeakMap to prevent leaking element references from FormAssociated (nicholasrice@users.noreply.github.com)
+
+## 2.35.2
+
+Wed, 09 Mar 2022 07:12:32 GMT
+
+### Patches
+
+- Fix bug with menu-item indention (20542556+mollykreis@users.noreply.github.com)
+
+## 2.35.1
+
+Tue, 08 Mar 2022 07:12:45 GMT
+
+### Patches
+
+- Fix programmatic disable/enable of tabs (5454342+brianehenry@users.noreply.github.com)
+
+## 2.35.0
+
+Sun, 06 Mar 2022 07:13:48 GMT
+
+### Minor changes
+
+- add corner positions to tooltip (sethdonohue@Admins-MBP.guest.corp.microsoft.com)
+
+### Patches
+
+- passive handlers (scomea@microsoft.com)
+- tooltip hover (scomea@microsoft.com)
 
 ## 2.34.0
 

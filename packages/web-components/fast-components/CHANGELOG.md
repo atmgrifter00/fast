@@ -1,8 +1,50 @@
 # Change Log - @microsoft/fast-components
 
-This log was last generated on Wed, 02 Mar 2022 07:12:58 GMT and should not be manually modified.
+This log was last generated on Fri, 11 Mar 2022 23:46:34 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.23.0
+
+Fri, 11 Mar 2022 23:46:34 GMT
+
+### Minor changes
+
+- BREAKING CHANGE: replace WC button with stock HTML button (jes@microsoft.com)
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.36.0 (jes@microsoft.com)
+
+## 2.22.2
+
+Wed, 09 Mar 2022 07:12:32 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.35.2 (20542556+mollykreis@users.noreply.github.com)
+
+## 2.22.1
+
+Tue, 08 Mar 2022 07:12:45 GMT
+
+### Patches
+
+- flex items should be aligned on cross axis. (srdsecond@gmail.com)
+
+## 2.22.0
+
+Sun, 06 Mar 2022 07:13:48 GMT
+
+### Minor changes
+
+- add corner position styling to tooltip (sethdonohue@Admins-MBP.guest.corp.microsoft.com)
+
+### Patches
+
+- set fast-anchor appearance after connecting (john.kreitlow@microsoft.com)
+- tooltip hover (scomea@microsoft.com)
+- Bump @microsoft/fast-foundation to v2.35.0 (sethdonohue@Admins-MBP.guest.corp.microsoft.com)
 
 ## 2.21.9
 

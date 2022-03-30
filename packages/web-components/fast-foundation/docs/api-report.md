@@ -6,6 +6,7 @@
 
 import { AttributeConfiguration } from '@microsoft/fast-element';
 import { Behavior } from '@microsoft/fast-element';
+import { CaptureType } from '@microsoft/fast-element';
 import { ComposableStyles } from '@microsoft/fast-element';
 import { Constructable } from '@microsoft/fast-element';
 import { CSSDirective } from '@microsoft/fast-element';
@@ -91,13 +92,12 @@ export class Anchor extends FoundationElement {
 export interface Anchor extends StartEnd, DelegatesARIALink {
 }
 
-// @beta
+// @public
 export class AnchoredRegion extends FoundationElement {
     // @internal (undocumented)
     adoptedCallback(): void;
     anchor: string;
     anchorElement: HTMLElement | null;
-    // (undocumented)
     autoUpdateMode: AutoUpdateMode;
     // @internal (undocumented)
     connectedCallback(): void;
@@ -127,33 +127,26 @@ export class AnchoredRegion extends FoundationElement {
 
 // @public
 export interface AnchoredRegionConfig {
-    // Warning: (ae-incompatible-release-tags) The symbol "autoUpdateMode" is marked as @public, but its signature references "AutoUpdateMode" which is marked as @beta
     readonly autoUpdateMode?: AutoUpdateMode;
     readonly fixedPlacement?: boolean;
-    // Warning: (ae-incompatible-release-tags) The symbol "horizontalDefaultPosition" is marked as @public, but its signature references "HorizontalPosition" which is marked as @beta
     readonly horizontalDefaultPosition?: HorizontalPosition;
     readonly horizontalInset?: boolean;
-    // Warning: (ae-incompatible-release-tags) The symbol "horizontalPositioningMode" is marked as @public, but its signature references "AxisPositioningMode" which is marked as @beta
     readonly horizontalPositioningMode?: AxisPositioningMode;
-    // Warning: (ae-incompatible-release-tags) The symbol "horizontalScaling" is marked as @public, but its signature references "AxisScalingMode" which is marked as @beta
     readonly horizontalScaling?: AxisScalingMode;
     readonly horizontalThreshold?: number;
     readonly horizontalViewportLock?: boolean;
-    // Warning: (ae-incompatible-release-tags) The symbol "verticalDefaultPosition" is marked as @public, but its signature references "VerticalPosition" which is marked as @beta
     readonly verticalDefaultPosition?: VerticalPosition;
     readonly verticalInset?: boolean;
-    // Warning: (ae-incompatible-release-tags) The symbol "verticalPositioningMode" is marked as @public, but its signature references "AxisPositioningMode" which is marked as @beta
     readonly verticalPositioningMode?: AxisPositioningMode;
-    // Warning: (ae-incompatible-release-tags) The symbol "verticalScaling" is marked as @public, but its signature references "AxisScalingMode" which is marked as @beta
     readonly verticalScaling?: AxisScalingMode;
     readonly verticalThreshold?: number;
     readonly verticalViewportLock?: boolean;
 }
 
-// @beta
+// @public
 export type AnchoredRegionPositionLabel = "start" | "insetStart" | "insetEnd" | "end" | "center";
 
-// @beta
+// @public
 export const anchoredRegionTemplate: FoundationElementTemplate<ViewTemplate<AnchoredRegion>>;
 
 // @public
@@ -188,7 +181,7 @@ export class ARIAGlobalStatesAndProperties {
     ariaRoledescription: string;
 }
 
-// @beta
+// @public
 export type AutoUpdateMode = "anchor" | "auto";
 
 // @public
@@ -209,10 +202,10 @@ export type AvatarOptions = FoundationElementDefinition & {
 // @public
 export const avatarTemplate: FoundationElementTemplate<ViewTemplate<Avatar>, AvatarOptions>;
 
-// @beta
+// @public
 export type AxisPositioningMode = "uncontrolled" | "locktodefault" | "dynamic";
 
-// @beta
+// @public
 export type AxisScalingMode = "anchor" | "fill" | "content";
 
 // @public
@@ -1302,7 +1295,7 @@ export const getDirection: (rootNode: HTMLElement) => Direction;
 // @public
 export const hidden = ":host([hidden]){display:none}";
 
-// @beta
+// @public
 export type HorizontalPosition = "start" | "end" | "left" | "right" | "center" | "unset";
 
 // @public
@@ -2002,6 +1995,9 @@ export type RadioOptions = FoundationElementDefinition & {
 // @public
 export const radioTemplate: FoundationElementTemplate<ViewTemplate<Radio>, RadioOptions>;
 
+// @beta
+export function reflectAttributes<T = any>(...attributes: string[]): CaptureType<T>;
+
 // @public
 export type RegisterSelf<T extends Constructable> = {
     register(container: Container): Resolver<InstanceType<T>>;
@@ -2228,6 +2224,16 @@ export function singleton<T extends Constructable>(options?: SingletonOptions): 
 
 // @public
 export function singleton<T extends Constructable>(target: T & Partial<RegisterSelf<T>>): T & RegisterSelf<T>;
+
+// @public
+export interface SizeMap {
+    // (undocumented)
+    end: number;
+    // (undocumented)
+    size: number;
+    // (undocumented)
+    start: number;
+}
 
 // @public
 export class Skeleton extends FoundationElement {
@@ -2620,7 +2626,6 @@ export const toolbarTemplate: FoundationElementTemplate<ViewTemplate<Toolbar>, T
 export class Tooltip extends FoundationElement {
     anchor: string;
     anchorElement: HTMLElement | null;
-    // Warning: (ae-incompatible-release-tags) The symbol "autoUpdateMode" is marked as @public, but its signature references "AutoUpdateMode" which is marked as @beta
     autoUpdateMode: AutoUpdateMode;
     // (undocumented)
     connectedCallback(): void;
@@ -2769,7 +2774,7 @@ export const treeViewTemplate: FoundationElementTemplate<ViewTemplate<TreeView>>
 // @internal (undocumented)
 export function validateKey(key: any): void;
 
-// @beta
+// @public
 export type VerticalPosition = "top" | "bottom" | "center" | "unset";
 
 // @public
@@ -2786,10 +2791,10 @@ export class VirtualList extends FoundationElement {
     // @internal (undocumented)
     disconnectedCallback(): void;
     // @internal
-    endSpacerSpan: number;
+    endSpacerSize: number;
     // @internal
     firstRenderedIndex: number;
-    getItemSpanMap: (itemIndex: number) => SpanMap | null;
+    getItemSizeMap: (itemIndex: number) => SizeMap | null;
     // @internal
     handleChange(source: any, splices: Splice[]): void;
     // Warning: (ae-forgotten-export) The symbol "IdleCallbackQueue" needs to be exported by the entry point index.d.ts
@@ -2798,7 +2803,7 @@ export class VirtualList extends FoundationElement {
     idleCallbackQueue: IdleCallbackQueue;
     idleCallbackTimeout: number;
     items: object[];
-    itemSpan: number;
+    itemSize: number;
     itemTemplate: ViewTemplate;
     // @internal
     lastRenderedIndex: number;
@@ -2807,20 +2812,20 @@ export class VirtualList extends FoundationElement {
     recycle: boolean;
     protected requestPositionUpdates(): void;
     protected reset(): void;
-    spanmap: SpanMap[];
+    sizemap: SizeMap[];
     // @internal
-    startSpacerSpan: number;
+    startSpacerSize: number;
     // @internal
-    totalListSpan: number;
+    totalListSize: number;
     update(): void;
     viewport: string;
     viewportBuffer: number;
     viewportElement: HTMLElement;
-    virtualize: boolean;
+    virtualizationEnabled: boolean;
+    // @internal
+    visibleItemMap: SizeMap[];
     // @internal
     visibleItems: any[];
-    // @internal
-    visibleItemSpans: SpanMap[];
 }
 
 // @public

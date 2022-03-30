@@ -58,22 +58,22 @@ describe("VirtualList", () => {
         await disconnect();
     });
 
-    it("should have a default virtualize attr of 'true'", async () => {
+    it("should have a default virtualization-enabled attr of 'true'", async () => {
         const { element, connect, disconnect } = await setup();
 
         await connect();
 
-        expect(element.virtualize).to.equal(true);
+        expect(element.virtualizationEnabled).to.equal(true);
 
         await disconnect();
     });
 
-    it("should have a default item-span of '50'", async () => {
+    it("should have a default item-size of '50'", async () => {
         const { element, connect, disconnect } = await setup();
 
         await connect();
 
-        expect(element.itemSpan).to.equal(50);
+        expect(element.itemSize).to.equal(50);
 
         await disconnect();
     });
@@ -98,12 +98,12 @@ describe("VirtualList", () => {
         await disconnect();
     });
 
-    it("should have a default visibleItemSpans of 'undefined'", async () => {
+    it("should have a default visibleItemMap of 'undefined'", async () => {
         const { element, connect, disconnect } = await setup();
 
         await connect();
 
-        expect(element.visibleItemSpans).to.be.empty;
+        expect(element.visibleItemMap).to.be.empty;
 
         await disconnect();
     });
@@ -118,11 +118,11 @@ describe("VirtualList", () => {
         await disconnect();
     });
 
-    it("should render all items when virtualize is false", async () => {
+    it("should render all items when virtualization-enabled is false", async () => {
         const { element, connect, disconnect } = await setup();
 
         element.items = newDataSet(100);
-        element.virtualize = false;
+        element.virtualizationEnabled = false;
         await connect();
 
         expect(element.visibleItems.length).to.equal(100);
@@ -139,7 +139,7 @@ describe("VirtualList", () => {
         await DOM.nextUpdate();
 
         let eventEmitted = false;
-        element.addEventListener("rendered-range-change", e => {
+        element.addEventListener("renderedrangechange", e => {
             eventEmitted = true;
         });
 
@@ -152,51 +152,51 @@ describe("VirtualList", () => {
         await disconnect();
     });
 
-    it("should use spanmap to calculate spans when one is provided", async () => {
+    it("should use sizemap to calculate sizes when one is provided", async () => {
         const { element, connect, disconnect } = await setup();
 
         element.items = newDataSet(3);
-        element.virtualize = false;
-        element.spanmap = [
-            {start: 0, span: 100, end: 100},
-            {start: 100, span: 200, end: 300},
-            {start: 300, span: 300, end: 600},
+        element.virtualizationEnabled = false;
+        element.sizemap = [
+            {start: 0, size: 100, end: 100},
+            {start: 100, size: 200, end: 300},
+            {start: 300, size: 300, end: 600},
         ]
         await connect();
 
-        expect(element.totalListSpan).to.equal(600);
+        expect(element.totalListSize).to.equal(600);
 
         await disconnect();
     });
 
-    it("should return the correct spanMap when getItemSpanMap is called and spanmap is specified", async () => {
+    it("should return the correct sizeMap when getItemSizeMap is called and sizemap is specified", async () => {
         const { element, connect, disconnect } = await setup();
 
         element.items = newDataSet(3);
-        element.virtualize = false;
-        element.spanmap = [
-            {start: 0, span: 100, end: 100},
-            {start: 100, span: 200, end: 300},
-            {start: 300, span: 300, end: 600},
+        element.virtualizationEnabled = false;
+        element.sizemap = [
+            {start: 0, size: 100, end: 100},
+            {start: 100, size: 200, end: 300},
+            {start: 300, size: 300, end: 600},
         ];
         await connect();
 
-        expect(element.getItemSpanMap(0)?.end).to.equal(100);
-        expect(element.getItemSpanMap(2)?.end).to.equal(600);
+        expect(element.getItemSizeMap(0)?.end).to.equal(100);
+        expect(element.getItemSizeMap(2)?.end).to.equal(600);
 
         await disconnect();
     });
 
-    it("should return the correct spanMap when getItemSpanMap is called when no spanmap is specified", async () => {
+    it("should return the correct sizeMap when getItemSizeMap is called when no sizemap is specified", async () => {
         const { element, connect, disconnect } = await setup();
 
         element.items = newDataSet(3);
-        element.virtualize = false;
+        element.virtualizationEnabled = false;
 
         await connect();
 
-        expect(element.getItemSpanMap(0)?.end).to.equal(50);
-        expect(element.getItemSpanMap(2)?.end).to.equal(150);
+        expect(element.getItemSizeMap(0)?.end).to.equal(50);
+        expect(element.getItemSizeMap(2)?.end).to.equal(150);
 
         await disconnect();
     });
